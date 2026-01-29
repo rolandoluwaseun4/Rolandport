@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roland - Creative Developer & Designer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #13131a;
+            --accent-primary: #00d4ff;
+            --accent-secondary: #7000ff;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --glow: rgba(0, 212, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(112, 0, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 128, 0.1) 0%, transparent 50%);
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-5%, 5%) scale(1.05); }
+            66% { transform: translate(5%, -5%) scale(0.95); }
+        }
+
+        /* Glass Container */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding: 12px 24px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        nav ul {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        nav a:hover::before {
+            opacity: 0.2;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 40px 60px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 1; 
+                box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7);
+            }
+            50% { 
+                opacity: 0.8; 
+                box-shadow: 0 0 0 8px rgba(0, 255, 136, 0);
+            }
+        }
+
+        h1 {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent-primary) 50%, var(--accent-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 700px;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Floating Icons */
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .icon-float {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .icon-float:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .icon-float:nth-child(2) { top: 60%; left: 15%; animation-delay: 1s; }
+        .icon-float:nth-child(3) { top: 30%; right: 12%; animation-delay: 2s; }
+        .icon-float:nth-child(4) { bottom: 25%; right: 18%; animation-delay: 1.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Section */
+        section {
+            margin: 120px 0;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .section-title {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff, var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 60px;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .skill-card {
+            padding: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2);
+        }
+
+        .skill-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .skill-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
+        }
+
+        .skill-card h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .skill-card p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 32px;
+        }
+
+        .project-card {
+            padding: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 24px 72px rgba(0, 212, 255, 0.25);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 260px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(112, 0, 255, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .project-content {
+            padding: 28px;
+        }
+
+        .project-card h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-size: 15px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            padding: 6px 14px;
+            background: rgba(0, 212, 255, 0.15);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--accent-primary);
+        }
+
+        /* Contact Section */
+        .contact-content {
+            text-align: center;
+            padding: 80px 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-content h2 {
+            font-size: clamp(36px, 5vw, 56px);
+            margin-bottom: 20px;
+        }
+
+        .contact-content p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .social-link {
+            width: 56px;
+            height: 56px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            box-shadow: 0 12px 32px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 100px 24px 40px;
+            }
+
+            nav ul {
+                gap: 4px;
+            }
+
+            nav a {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .skills-grid,
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .icon-float {
+                display: none;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* Scroll Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <nav class="glass">
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Work</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <section id="home" class="hero">
+            <div class="floating-icons">
+                <div class="icon-float">💻</div>
+                <div class="icon-float">🎨</div>
+                <div class="icon-float">⚡</div>
+                <div class="icon-float">✨</div>
+            </div>
+
+            <div class="hero-badge glass">
+                <span class="status-dot"></span>
+                <span>Available for work</span>
+            </div>
+
+            <h1>Hi, I'm Roland</h1>
+            
+            <p class="hero-subtitle">
+                Frontend Developer & Graphic Designer crafting exceptional digital experiences from Lagos, Nigeria. 
+                I transform ideas into elegant, high-performance interfaces.
+            </p>
+
+            <div class="hero-cta">
+                <a href="#projects" class="btn btn-primary">View My Work</a>
+                <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+            </div>
+        </section>
+
+        <section id="about" class="reveal">
+            <h2 class="section-title">About Me</h2>
+            <p class="section-subtitle">Passionate about creating beautiful, functional experiences</p>
+            
+            <div class="glass" style="padding: 48px; max-width: 900px; margin: 0 auto;">
+                <p style="font-size: 18px; line-height: 1.8; color: var(--text-secondary);">
+                    I'm a creative developer and designer based in Nigeria, specializing in building modern web applications 
+                    and stunning visual identities. With expertise in frontend development and graphic design, I bridge the 
+                    gap between aesthetics and functionality. Every project is an opportunity to push creative boundaries 
+                    while delivering solutions that perform flawlessly.
+                </p>
+            </div>
+        </section>
+
+        <section id="skills" class="reveal">
+            <h2 class="section-title">What I Do</h2>
+            <p class="section-subtitle">Expertise across design and development</p>
+
+            <div class="skills-grid">
+                <div class="skill-card glass">
+                    <div class="skill-icon">⚛️</div>
+                    <h3>Frontend Development</h3>
+                    <p>Building responsive, performant web applications with React, Vue, and modern JavaScript. Specializing in interactive UIs with smooth animations and seamless user experiences.</p>
+                </div>
+
+                <div class="skill-card glass">
+                    <div class="skill-icon">🎨</div>
+                    <h3>Graphic Design</h3>
+                    <p>Creating compelling visual identities, branding materials, and digital artwork. Expert in Adobe Creative Suite, Figma, and contemporary design principles.</p>
+                </div>
+
+                <div class="skill-card glass">
+                    <div class="skill-icon">📱</div>
+                    <h3>UI/UX Design</h3>
+                    <p>Designing intuitive user interfaces with focus on accessibility and user-centered design. Crafting experiences that delight and convert.</p>
+                </div>
+
+                <div class="skill-card glass">
+                    <div class="skill-icon">⚡</div>
+                    <h3>Web Performance</h3>
+                    <p>Optimizing websites for speed and efficiency. Implementing best practices for Core Web Vitals, lazy loading, and progressive enhancement.</p>
+                </div>
+
+                <div class="skill-card glass">
+                    <div class="skill-icon">🛠️</div>
+                    <h3>Modern Tooling</h3>
+                    <p>Proficient with Git, Webpack, Vite, and modern development workflows. Continuous integration and deployment expertise.</p>
+                </div>
+
+                <div class="skill-card glass">
+                    <div class="skill-icon">🌐</div>
+                    <h3>Web Standards</h3>
+                    <p>Deep understanding of HTML5, CSS3, and web accessibility standards. Building semantic, SEO-friendly applications that work everywhere.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="reveal">
+            <h2 class="section-title">Featured Work</h2>
+            <p class="section-subtitle">Selected projects showcasing my capabilities</p>
+
+            <div class="projects-grid">
+                <div class="project-card glass">
+                    <div class="project-image">🚀</div>
+                    <div class="project-content">
+                        <h3>E-Commerce Platform</h3>
+                        <p>Modern shopping experience with cart management, payment integration, and real-time inventory updates.</p>
+                        <div class="project-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Redux</span>
+                            <span class="tag">Stripe</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card glass">
+                    <div class="project-image">📊</div>
+                    <div class="project-content">
+                        <h3>Analytics Dashboard</h3>
+                        <p>Data visualization platform with interactive charts, real-time updates, and comprehensive reporting features.</p>
+                        <div class="project-tags">
+                            <span class="tag">Vue.js</span>
+                            <span class="tag">D3.js</span>
+                            <span class="tag">WebSocket</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card glass">
+                    <div class="project-image">🎭</div>
+                    <div class="project-content">
+                        <h3>Brand Identity System</h3>
+                        <p>Complete visual identity including logo, color system, typography, and brand guidelines for a tech startup.</p>
+                        <div class="project-tags">
+                            <span class="tag">Branding</span>
+                            <span class="tag">Illustrator</span>
+                            <span class="tag">Figma</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card glass">
+                    <div class="project-image">🎵</div>
+                    <div class="project-content">
+                        <h3>Music Streaming App</h3>
+                        <p>Beautiful music player with playlist management, social features, and crystal-clear audio playback.</p>
+                        <div class="project-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Web Audio API</span>
+                            <span class="tag">CSS Animation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card glass">
+                    <div class="project-image">🏠</div>
+                    <div class="project-content">
+                        <h3>Real Estate Platform</h3>
+                        <p>Property listing site with advanced search, virtual tours, and integrated map views for property exploration.</p>
+                        <div class="project-tags">
+                            <span class="tag">Next.js</span>
+                            <span class="tag">Mapbox</span>
+                            <span class="tag">TypeScript</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card glass">
+                    <div class="project-image">✨</div>
+                    <div class="project-content">
+                        <h3>Creative Portfolio</h3>
+                        <p>Immersive portfolio website with smooth page transitions, parallax effects, and stunning visual presentations.</p>
+                        <div class="project-tags">
+                            <span class="tag">GSAP</span>
+                            <span class="tag">Three.js</span>
+                            <span class="tag">Locomotive</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="reveal">
+            <div class="contact-content glass">
+                <h2>Let's Work Together</h2>
+                <p>Have a project in mind? I'd love to hear about it. Let's create something amazing together.</p>
+                
+                <div class="hero-cta">
+                    <a href="/cdn-cgi/l/email-protection#52203d3e333c363d3e2725332137273c6612353f333b3e7c313d3f" class="btn btn-primary">Send Email</a>
+                    <a href="tel:+234" class="btn btn-secondary">Schedule Call</a>
+                </div>
+
+                <div class="social-links">
+                    <a href="https://github.com/roland" class="social-link" target="_blank" title="GitHub">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com/in/roland" class="social-link" target="_blank" title="LinkedIn">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                    </a>
+                    <a href="https://x.com/rolandtheDev_" class="social-link" target="_blank" title="Twitter">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://dribbble.com/roland" class="social-link" target="_blank" title="Dribbble">
+                        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0C5.375 0 0 5.375 0 12c0 6.627 5.375 12 12 12 6.627 0 12-5.373 12-12 0-6.625-5.373-12-12-12zm9.709 12.016c-.187.047-2.17.478-4.471.239-.043-.098-.086-.203-.135-.307-.108-.246-.227-.496-.344-.743 2.352-1.004 3.332-2.449 3.438-2.621.918 1.078 1.484 2.463 1.512 3.432zm-1.904-4.854c-.082.131-.975 1.482-3.234 2.359-1.127-2.062-2.373-3.77-2.562-4.047 1.951-.457 3.711.244 4.796 1.688zM9.598 1.67c.199.283 1.469 1.988 2.586 4.107-3.24.898-6.113.881-6.428.877.568-2.328 2.342-4.211 4.842-4.984zm-5.598 10.322c0-.053.004-.107.006-.16.303.006 3.736.078 7.252-.98.271.527.523 1.064.754 1.6-.096.027-.193.059-.289.086-3.658 1.18-5.598 4.404-5.723 4.627-1.127-1.211-1.998-2.883-2-4.673zm2.748 5.996c.033-.314 1.443-2.936 5.479-4.301l.002-.002c1.209 3.131 1.705 5.758 1.834 6.48-2.002.857-4.322.709-6.177-.031-.605-.461-1.066-.73-1.138-1.146zm8.393 1.293c-.119-.674-.539-2.939-1.607-5.988 2.18-.34 4.094.227 4.326.297-.344 1.814-1.383 3.373-2.719 4.691z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Roland. Crafted with passion in Nigeria. All rights reserved.</p>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Scroll reveal animations
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            
+            revealElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const revealPoint = 100;
+                
+                if (elementTop < windowHeight - revealPoint) {
+                    element.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Initial check
+
+        // Parallax effect for floating icons
+        document.addEventListener('mousemove', (e) => {
+            const icons = document.querySelectorAll('.icon-float');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            icons.forEach((icon, index) => {
+                const speed = (index + 1) * 20;
+                const x = (mouseX - 0.5) * speed;
+                const y = (mouseY - 0.5) * speed;
+                icon.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+
+        // Performance optimization: reduce animations on low-end devices
+        if (navigator.hardwareConcurrency <= 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            docum
